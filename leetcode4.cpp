@@ -14,6 +14,9 @@ class Solution {
 public:
     ListNode *sortList(ListNode *head) {
 
+        if (!head)
+            return NULL;
+
         int minimum;
 
         ListNode *p1 = NULL;
@@ -24,7 +27,7 @@ public:
         ListNode *tempHead = head;
 
         bool isMin = true;
-
+        bool findflag = false;
         while (temp)
         {
             minimum = temp->val;
@@ -36,25 +39,31 @@ public:
                     minimum = temp->next->val;
                     minNode = temp->next;
                     pre = temp;
+                    findflag = true;
                 }
 
                 temp = temp->next;
             }
 
-            pre = minNode->next;
+            if (findflag)
+            {
+                pre->next = minNode->next;
 
-            p1 = tempHead->next;
-            tempHead->next = minNode;
-            minNode->next = p1;
+                p1 = tempHead->next;
+                tempHead->next = minNode;
+                minNode->next = p1;
+            }
 
-            temp = minNode->next;
             tempHead = tempHead->next;
+            temp = tempHead->next;
 
             if (isMin)
             {
                 head->next = minNode;
                 isMin = false;
             }
+
+            findflag = false;
         }
 
         return head;
@@ -82,8 +91,8 @@ int main()
 
     Solution mySolution;
     ListNode* output = mySolution.sortList(head);
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 6; i++, output = output->next)
     {
-        cout << "%d" << (output++)->val;
+        printf("%d\n", output->next->val);
     }
 }
