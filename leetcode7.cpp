@@ -73,28 +73,24 @@ private:
         bool searchKey(int key, int width, int index1, int& index2)
         {
             int addr = key % width;
-            while (elem[addr] != key)
-            {
-                addr = (addr + 1) % width;
-                if (elem[addr] == -32768 || addr == (key % width))
-                    return false;
-            }
 
-            index2 = indexRecoder[addr];
-
-            if (index1 != index2)
-                return true;
-            else
+            while (1)
             {
-                addr++;
                 while (elem[addr] != key)
                 {
                     addr = (addr + 1) % width;
                     if (elem[addr] == -32768 || addr == (key % width))
                         return false;
                 }
+
                 index2 = indexRecoder[addr];
-                return true;
+
+                if (index1 < index2)
+                    return true;
+                else
+                {
+                    addr = (addr + 1) % width;
+                }
             }
         }
     };
@@ -121,7 +117,7 @@ int main()
     Solution mySolution;
     vector<int>index;
     index = mySolution.twoSum(input, target);
-    
+
     cout << "indexes are: \n";
     for (unsigned int i = 0; i < index.size(); i++)
     {
