@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 using namespace std;
 
 /**
@@ -14,45 +15,54 @@ class Solution {
 public:
     void reorderList(ListNode *head)
     {
-        if (!head)
-            return;
-        if (!head->next || !head->next->next)
+        if (!head || !head->next || !head->next->next)
             return;
 
-        ListNode *tail = NULL;
+        stack<ListNode*> s;
 
-        ListNode *temp = head->next;
-        ListNode *bak = NULL;
-        ListNode *pre = NULL;
+        ListNode* slow = head;
+        ListNode* fast = head;
 
-        ListNode *pHead = head;
-
-        while (1)
+        while (fast->next != NULL && fast->next->next != NULL) 
         {
-            while (1)
-            {
-                if (!temp->next->next)
-                {
-                    tail = temp->next;
-                    pre = temp;
-                    break;
-                }
-                temp = temp->next;
-            }
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        while (slow->next != NULL) 
+        {
+            s.push(slow->next);
+            slow = slow->next;
+        }
 
-            bak = pHead->next;
-            pHead->next = tail;
-            tail->next = bak;
-            pre->next = NULL;
-            pHead = pHead->next->next;
-            temp = pHead->next;
-            if (!pHead->next)
+        ListNode *h1 = head;
+        if (fast->next == NULL) 
+        {
+            while (!s.empty()) 
             {
-                break;
+                ListNode *cur = s.top();
+                s.pop();
+                cur->next = h1->next;
+                h1->next = cur;
+                h1 = cur->next;
             }
-            else if (!temp->next)
-            {
-                break;
+            h1->next = NULL;
+            return;
+        }
+        else 
+        {
+            while (!s.empty()) {
+                ListNode *cur = s.top();
+                s.pop();
+                if (s.empty()) {
+                    cur->next = NULL;
+                    h1->next = cur;
+                    return;
+                }
+                else {
+                    cur->next = h1->next;
+                    h1->next = cur;
+                    h1 = cur->next;
+                }
             }
         }
     }
