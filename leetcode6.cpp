@@ -19,7 +19,7 @@ public:
         if (!head->next || !head->next->next)
             return;
 
-        ListNode *tail = head;
+        ListNode *tail = NULL;
 
         ListNode *temp = head->next;
         ListNode *bak = NULL;
@@ -33,7 +33,7 @@ public:
             {
                 if (!temp->next->next)
                 {
-                    tail = temp;
+                    tail = temp->next;
                     pre = temp;
                     break;
                 }
@@ -41,13 +41,19 @@ public:
             }
 
             bak = pHead->next;
-            pHead->next = tail->next;
-            tail->next->next = bak;
+            pHead->next = tail;
+            tail->next = bak;
             pre->next = NULL;
             pHead = pHead->next->next;
             temp = pHead->next;
-            if (!pHead->next || !temp->next)
+            if (!pHead->next)
+            {
                 break;
+            }
+            else if (!temp->next)
+            {
+                break;
+            }
         }
     }
 };
@@ -61,17 +67,17 @@ int main()
     ListNode *in4 = new ListNode(5);
     ListNode *in5 = new ListNode(6);
     ListNode *in6 = new ListNode(7);
-    
+
     in0->next = in1;
-//     in1->next = in2;
-//     in2->next = in3;
-//     in3->next = in4;
-//     in4->next = in5;
-//     in5->next = in6;
+    in1->next = in2;
+    in2->next = in3;
+    in3->next = in4;
+    in4->next = in5;
+    in5->next = in6;
 
     Solution mySolution;
     mySolution.reorderList(in0);
-    for (int i = 0; i < 2; i++, in0 = in0->next)
+    for (int i = 0; i < 7; i++, in0 = in0->next)
     {
         printf("%d\n", in0->val);
     }
